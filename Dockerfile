@@ -1,6 +1,8 @@
 FROM php:8.4-cli
 RUN echo "FORCE REBUILD 17 AGUSTUS 00:17 - PHP 8.4"
 RUN apt-get update && apt-get install -y git unzip libpng-dev libonig-dev libxml2-dev libzip-dev curl && docker-php-ext-install pdo_mysql mbstring gd zip && apt-get clean && rm -rf /var/lib/apt/lists/*
+...
+RUN apt-get update && apt-get install -y git unzip libpng-dev libonig-dev libxml2-dev libzip-dev curl && docker-php-ext-install pdo_mysql mbstring gd zip && apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 WORKDIR /var/www/html
 COPY . .
