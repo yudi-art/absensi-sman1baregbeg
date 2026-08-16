@@ -1,1 +1,10 @@
-{"$schema":"https://schema.up.railway.app/railway.json","build":{"builder":"dockerfile"},"deploy":{"healthcheckPath":"/","healthcheckTimeout":300,"restartPolicyType":"onFailure"}}
+{
+  "$schema": "https://schema.up.railway.app/railway.json",
+  "build": {
+    "builder": "dockerfile"
+  },
+  "deploy": {
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 300
+  }
+}
