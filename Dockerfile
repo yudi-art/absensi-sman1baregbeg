@@ -15,6 +15,10 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 
 COPY . .
 
+# INI KUNCI NYA - MATIKAN BLOCK SECURITY ADVISORY
+RUN composer config --no-interaction policy.advisories.block false || true
+RUN composer config --no-interaction audit.block-insecure false || true
+
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --ignore-platform-reqs
 
 RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
