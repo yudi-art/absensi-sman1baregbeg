@@ -1,0 +1,1 @@
+<?php namespace App\Models; use Illuminate\Database\Eloquent\Model; class KasMasuk extends Model { protected $table='kas_masuk'; protected $fillable=['tanggal','siswa_id','nominal','keterangan','created_by']; }
