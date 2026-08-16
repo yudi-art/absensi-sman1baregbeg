@@ -15,15 +15,16 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 
 COPY . .
 
-# INI KUNCI NYA - MATIKAN BLOCK SECURITY ADVISORY
 RUN composer config --no-interaction policy.advisories.block false || true
 RUN composer config --no-interaction audit.block-insecure false || true
-
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --ignore-platform-reqs
 
 RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
  && chown -R www-data:www-data storage bootstrap/cache \
  && chmod -R 775 storage bootstrap/cache
 
+# FIX PORT RAILWAY - WAJIB!
+RUN printf '#!/bin/bash\nset -e\nPORT=${PORT:-8080}\necho "Listen $PORT" > /etc/apache2/ports.conf\necho "<VirtualHost *:$PORT>\n DocumentRoot /var/www/html/public\n <Directory /var/www/html/public>\n  AllowOverride All\n  Require all granted\n </Directory>\n</VirtualHost>" > /etc/apache2/sites-available/000-default.conf\nphp artisan config:clear 2>/dev/null || true\napache2-foreground\n' > /start.sh && chmod +x /start.sh
+
 EXPOSE 8080
-CMD bash -c 'PORT=${PORT:-8080}; echo "Listen $PORT" > /etc/apache2/ports.conf; sed -i "s/:80/:$PORT/g" /etc/apache2/sites-available/000-default.conf; apache2-foreground'
+CMD ["/start.sh"]
